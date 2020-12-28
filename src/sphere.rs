@@ -1,14 +1,16 @@
 use super::hitable;
 use super::vec3;
 use super::ray;
+use super::material;
 
 #[derive(Copy, Clone)]
-pub struct Sphere {
+pub struct Sphere<'a> {
     pub center: vec3::Vec3,
-    pub radius: f32
+    pub radius: f32,
+    pub material: &'a dyn material::Material,
 }
 
-impl hitable::Hitable for Sphere {
+impl hitable::Hitable for Sphere<'_> {
     fn hit(&self, r: ray::Ray, t_min: f32, t_max: f32) -> Option<hitable::HitRecord> {
         let oc = r.origin() - self.center;
         let a = r.direction().dot(r.direction());
@@ -23,6 +25,7 @@ impl hitable::Hitable for Sphere {
                     t: temp,
                     p: p,
                     normal: (p - self.center) / self.radius,
+                    material: self.material,
                 });
             }
             temp = (-b + discriminant.sqrt()) / a;
@@ -32,9 +35,22 @@ impl hitable::Hitable for Sphere {
                     t: temp,
                     p: p,
                     normal: (p - self.center) / self.radius,
+                    material: self.material,
                 });
             }
         }
         return None;
     }
+}
+
+
+pub fn random_in_unit_sphere() -> vec3::Vec3 {
+    let mut p: vec3::Vec3;
+    loop {
+        p = 2.0 * vec3::Vec3{ e: [rand::random::<f32>(), rand::random::<f32>(),
+                                      rand::random::<f32>()]}
+                - vec3::Vec3{ e: [1.0, 1.0, 1.0] };
+        if !(p.squared_length() >= 1.0) { break; }
+    }
+    p
 }
