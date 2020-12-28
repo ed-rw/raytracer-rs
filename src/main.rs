@@ -37,7 +37,7 @@ fn main() {
             },
             radius: 0.5,
             material: &material::Lambertian {
-                albedo: vec3::Vec3 { e: [0.8, 0.3, 0.3] },
+                albedo: vec3::Vec3 { e: [0.1, 0.2, 0.5] },
             },
         }) as Box<dyn hitable::Hitable>,
         Box::new(sphere::Sphere {
@@ -64,9 +64,17 @@ fn main() {
                 e: [-1.0, 0.0, -1.0],
             },
             radius: 0.5,
-            material: &material::Metal {
-                albedo: vec3::Vec3 { e: [0.8, 0.8, 0.8] },
-                fuzz: 0.5,
+            material: &material::Dielectric {
+                refraction_index: 2.4,
+            },
+        }) as Box<dyn hitable::Hitable>,
+        Box::new(sphere::Sphere {
+            center: vec3::Vec3 {
+                e: [-1.0, 0.0, -1.0],
+            },
+            radius: -0.45,
+            material: &material::Dielectric {
+                refraction_index: 2.4,
             },
         }) as Box<dyn hitable::Hitable>,
     ];
