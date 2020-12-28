@@ -166,9 +166,9 @@ impl ops::DivAssign for Vec3 {
 impl ops::DivAssign<f32> for Vec3 {
     fn div_assign(&mut self, rhs: f32) {
         let k = 1.0/rhs;
-        *self = Self { e: [self.e[0] / k,
-                           self.e[1] / k,
-                           self.e[2] / k,]
+        *self = Self { e: [self.e[0] * k,
+                           self.e[1] * k,
+                           self.e[2] * k,]
         };
     }
 }
