@@ -65,7 +65,7 @@ fn main() {
             },
             radius: 0.5,
             material: &material::Dielectric {
-                refraction_index: 2.4,
+                refraction_index: 1.7,
             },
         }) as Box<dyn hitable::Hitable>,
         Box::new(sphere::Sphere {
@@ -74,12 +74,24 @@ fn main() {
             },
             radius: -0.45,
             material: &material::Dielectric {
-                refraction_index: 2.4,
+                refraction_index: 1.7,
             },
         }) as Box<dyn hitable::Hitable>,
     ];
     let world = hitable::HitableList { list: objs };
-    let cam = camera::Camera::new();
+
+    let cam = camera::Camera::new(
+        vec3::Vec3 {
+            e: [-2.0, 2.0, 1.0],
+        },
+        vec3::Vec3 {
+            e: [0.0, 0.0, -1.0],
+        },
+        vec3::Vec3 { e: [0.0, 1.0, 0.0] },
+        90.0,
+        nx as f32 / ny as f32,
+    );
+
     for j in (0..ny).rev() {
         for i in 0..nx {
             let mut col = vec3::Vec3 { e: [0.0, 0.0, 0.0] };
