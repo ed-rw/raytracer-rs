@@ -1,6 +1,6 @@
-use super::vec3;
-use super::ray;
 use super::material;
+use super::ray;
+use super::vec3;
 
 #[derive(Copy, Clone)]
 pub struct HitRecord<'a> {
