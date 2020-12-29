@@ -80,17 +80,22 @@ fn main() {
     ];
     let world = hitable::HitableList { list: objs };
 
-    let cam = camera::Camera::new(
-        vec3::Vec3 {
-            e: [-2.0, 2.0, 1.0],
-        },
-        vec3::Vec3 {
-            e: [0.0, 0.0, -1.0],
-        },
+
+    let lookfrom = vec3::Vec3 {
+        e: [-1.5, 1.5, 2.0],
+    };
+    let lookat = vec3::Vec3 {
+        e: [0.0, 0.0, -1.0],
+    };
+    let cam = Box::new(camera::NoBlurCamera::new(
+        lookfrom,
+        lookat,
         vec3::Vec3 { e: [0.0, 1.0, 0.0] },
-        90.0,
+        30.0,
         nx as f32 / ny as f32,
-    );
+        // 2.0,
+        // (lookfrom-lookat).length()
+    )) as Box<dyn camera::Camera>;
 
     for j in (0..ny).rev() {
         for i in 0..nx {
