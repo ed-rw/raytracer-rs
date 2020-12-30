@@ -7,7 +7,7 @@ pub struct HitRecord<'a> {
     pub t: f32,
     pub p: vec3::Vec3,
     pub normal: vec3::Vec3,
-    pub material: &'a dyn material::Material,
+    pub material: &'a Box<dyn material::Material>,
 }
 
 pub trait Hitable {

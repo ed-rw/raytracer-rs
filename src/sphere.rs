@@ -3,14 +3,13 @@ use super::material;
 use super::ray;
 use super::vec3;
 
-#[derive(Copy, Clone)]
-pub struct Sphere<'a> {
+pub struct Sphere {
     pub center: vec3::Vec3,
     pub radius: f32,
-    pub material: &'a dyn material::Material,
+    pub material: Box<dyn material::Material>,
 }
 
-impl hitable::Hitable for Sphere<'_> {
+impl hitable::Hitable for Sphere {
     fn hit(&self, r: ray::Ray, t_min: f32, t_max: f32) -> Option<hitable::HitRecord> {
         let oc = r.origin() - self.center;
         let a = r.direction().dot(r.direction());
@@ -25,7 +24,7 @@ impl hitable::Hitable for Sphere<'_> {
                     t: temp,
                     p: p,
                     normal: (p - self.center) / self.radius,
-                    material: self.material,
+                    material: &self.material,
                 });
             }
             temp = (-b + discriminant.sqrt()) / a;
@@ -35,7 +34,7 @@ impl hitable::Hitable for Sphere<'_> {
                     t: temp,
                     p: p,
                     normal: (p - self.center) / self.radius,
-                    material: self.material,
+                    material: &self.material,
                 });
             }
         }
