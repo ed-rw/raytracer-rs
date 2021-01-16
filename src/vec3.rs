@@ -1,4 +1,5 @@
 use std::ops;
+use num::{NumCast};
 
 #[derive(Copy, Clone)]
 pub struct Vec3 {
@@ -6,6 +7,10 @@ pub struct Vec3 {
 }
 
 impl Vec3 {
+    pub fn new<A: NumCast, B: NumCast, C: NumCast>(a: A, b: B, c: C) -> Self {
+        Vec3{ e:  [num::cast(a).unwrap(), num::cast(b).unwrap(), num::cast(c).unwrap()] }
+    }
+
     pub fn x(self) -> f32 {
         self.e[0]
     }

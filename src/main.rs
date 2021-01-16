@@ -13,13 +13,13 @@ fn color(r: ray::Ray, world: &dyn hitable::Hitable, depth: i32) -> vec3::Vec3 {
         if depth < 50 && scatter_bool {
             return attenuation * color(scattered, world, depth + 1);
         } else {
-            return vec3::Vec3 { e: [0.0, 0.0, 0.0] };
+            return vec3::Vec3::new(0, 0, 0);
         }
     } else {
         let unit_direction = vec3::unit_vector(r.direction());
         let t = 0.5 * (unit_direction.y() + 1.0);
-        return (1.0 - t) * vec3::Vec3 { e: [1.0, 1.0, 1.0] }
-            + t * vec3::Vec3 { e: [0.5, 0.7, 1.0] };
+        return (1.0 - t) * vec3::Vec3::new(1, 1, 1)
+            + t * vec3::Vec3::new(0.5, 0.7, 1.0);
     }
 }
 
@@ -28,11 +28,11 @@ fn generate_world() -> Vec<Box<dyn hitable::Hitable>>{
     let mut objs = Vec::new();
 
     let mat = Box::new(material::Lambertian {
-        albedo: vec3::Vec3 { e: [0.5, 0.5, 0.5] },
+        albedo: vec3::Vec3::new(0.5, 0.5, 0.5),
     }) as Box<dyn material::Material>;
 
     objs.push(Box::new(sphere::Sphere {
-        center: vec3::Vec3{ e: [0.0, -1000.0, 0.0]},
+        center: vec3::Vec3::new(0, -1000, 0),
         radius: 1000.0,
         material: mat,
     }) as Box<dyn hitable::Hitable>);
@@ -40,22 +40,22 @@ fn generate_world() -> Vec<Box<dyn hitable::Hitable>>{
     for a in -11..11 {
         for b in -11..11 {
             let choose_mat = rand::random::<f32>();
-            let center = vec3::Vec3{
-                e: [(a as f32)+0.9*rand::random::<f32>(), 0.2,
-                    (b as f32)+0.9*rand::random::<f32>()]
-            };
+            let center = vec3::Vec3::new(
+                    (a as f32)+0.9*rand::random::<f32>(), 0.2,
+                    (b as f32)+0.9*rand::random::<f32>()
+            );
 
-            let base = vec3::Vec3{ e: [4.0, 0.2, 0.0]};
+            let base = vec3::Vec3::new(4, 0.2, 0);
 
             if (center - base).length() > 0.9 {
                 let mat: Box<dyn material::Material>;
                 if choose_mat < 0.8 {
                     mat = Box::new(material::Lambertian {
-                        albedo: vec3::Vec3 { e: [rand::random::<f32>()*rand::random::<f32>(), rand::random::<f32>()*rand::random::<f32>(), rand::random::<f32>()*rand::random::<f32>()] },
+                        albedo: vec3::Vec3::new(rand::random::<f32>()*rand::random::<f32>(), rand::random::<f32>()*rand::random::<f32>(), rand::random::<f32>()*rand::random::<f32>()),
                     }) as Box<dyn material::Material>;
                 } else if choose_mat < 0.95 {
                     mat = Box::new(material::Metal {
-                            albedo: vec3::Vec3 { e: [1.0 + rand::random::<f32>(), 0.5*(1.0+rand::random::<f32>()), 0.5*rand::random::<f32>()] },
+                            albedo: vec3::Vec3::new(1.0 + rand::random::<f32>(), 0.5*(1.0+rand::random::<f32>()), 0.5*rand::random::<f32>()),
                             fuzz: 0.5*rand::random::<f32>(),
                         }) as Box<dyn material::Material>;
                 } else {
@@ -75,22 +75,22 @@ fn generate_world() -> Vec<Box<dyn hitable::Hitable>>{
     }
 
     let mat = Box::new(material::Lambertian {
-        albedo: vec3::Vec3 { e: [0.4, 0.2, 0.1] },
+        albedo: vec3::Vec3::new(0.4, 0.2, 0.1),
     }) as Box<dyn material::Material>;
 
     objs.push(Box::new(sphere::Sphere {
-        center: vec3::Vec3{ e: [-4.0, 1.0, 0.0]},
+        center: vec3::Vec3::new(-4, 1, 0),
         radius: 1.0,
         material: mat,
     }) as Box<dyn hitable::Hitable>);
 
     let mat = Box::new(material::Metal {
-        albedo: vec3::Vec3 { e: [0.7, 0.6, 0.5] },
+        albedo: vec3::Vec3::new(0.7, 0.6, 0.5),
         fuzz: 0.0,
     }) as Box<dyn material::Material>;
 
     objs.push(Box::new(sphere::Sphere {
-        center: vec3::Vec3{ e: [4.0, 1.0, 0.0]},
+        center: vec3::Vec3::new(4, 1, 0),
         radius: 1.0,
         material: mat,
     }) as Box<dyn hitable::Hitable>);
@@ -100,7 +100,7 @@ fn generate_world() -> Vec<Box<dyn hitable::Hitable>>{
     }) as Box<dyn material::Material>;
 
     objs.push(Box::new(sphere::Sphere {
-        center: vec3::Vec3{ e: [0.0, 1.0, 0.0]},
+        center: vec3::Vec3::new(0, 1, 0),
         radius: 1.0,
         material: mat,
     }) as Box<dyn hitable::Hitable>);
@@ -109,9 +109,9 @@ fn generate_world() -> Vec<Box<dyn hitable::Hitable>>{
 }
 
 fn main() {
-    let nx = 800;
-    let ny = 400;
-    let ns = 100;
+    let nx = 200;
+    let ny = 100;
+    let ns = 10;
 
     print!("P3\n{} {} \n255\n", nx, ny);
 
@@ -171,12 +171,8 @@ fn main() {
     let world = hitable::HitableList { list: objs };
 
 
-    let lookfrom = vec3::Vec3 {
-        e: [5.0, 2.0, 4.0],
-    };
-    let lookat = vec3::Vec3 {
-        e: [0.0, 0.0, -1.0],
-    };
+    let lookfrom = vec3::Vec3::new(5, 2, 4);
+    let lookat = vec3::Vec3::new(0, 0, -1);
     let cam = Box::new(camera::NoBlurCamera::new(
         lookfrom,
         lookat,
@@ -189,7 +185,7 @@ fn main() {
 
     for j in (0..ny).rev() {
         for i in 0..nx {
-            let mut col = vec3::Vec3 { e: [0.0, 0.0, 0.0] };
+            let mut col = vec3::Vec3::new(0, 0, 0);
             for _s in 0..ns {
                 let u = (i as f32 + rand::random::<f32>()) / nx as f32;
                 let v = (j as f32 + rand::random::<f32>()) / ny as f32;

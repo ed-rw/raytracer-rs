@@ -46,13 +46,11 @@ pub fn random_in_unit_sphere() -> vec3::Vec3 {
     let mut p: vec3::Vec3;
     loop {
         p =
-            2.0 * vec3::Vec3 {
-                e: [
+            2.0 * vec3::Vec3::new(
                     rand::random::<f32>(),
                     rand::random::<f32>(),
                     rand::random::<f32>(),
-                ],
-            } - vec3::Vec3 { e: [1.0, 1.0, 1.0] };
+                ) - vec3::Vec3::new(1, 1, 1);
         if !(p.squared_length() >= 1.0) {
             break;
         }

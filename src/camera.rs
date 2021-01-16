@@ -94,8 +94,8 @@ impl DefocusBlurCamera {
     fn random_in_unit_disk() -> vec3::Vec3 {
         let mut p: vec3::Vec3;
         loop {
-            p = 2.0 * vec3::Vec3{ e: [rand::random::<f32>(), rand::random::<f32>(), 0.0]}
-                - vec3::Vec3{ e: [1.0, 1.0, 0.0] };
+            p = 2.0 * vec3::Vec3::new(rand::random::<f32>(), rand::random::<f32>(), 0)
+                - vec3::Vec3::new(1, 1, 0);
             if !(p.dot(p) >= 1.0) {
                 break;
             }
