@@ -80,8 +80,10 @@ impl DefocusBlurCamera {
 
         Self {
             origin: lookfrom,
-            lower_left_corner: lookfrom - half_width * focus_dist * u
-                               - half_height * focus_dist * v - focus_dist * w,
+            lower_left_corner: lookfrom
+                - half_width * focus_dist * u
+                - half_height * focus_dist * v
+                - focus_dist * w,
             horizontal: 2.0 * half_width * focus_dist * u,
             vertical: 2.0 * half_height * focus_dist * v,
             u: u,
@@ -110,7 +112,9 @@ impl Camera for DefocusBlurCamera {
         let offset = self.u * rd.x() + self.v * rd.y();
         ray::Ray {
             a: self.origin + offset,
-            b: self.lower_left_corner + u * self.horizontal + v * self.vertical - self.origin - offset,
+            b: self.lower_left_corner + u * self.horizontal + v * self.vertical
+                - self.origin
+                - offset,
         }
     }
 }
